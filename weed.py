@@ -15,7 +15,7 @@ def main():
         print(" ".join(session_words))
         report_session(len(session_words), target_wc, elapsed_seconds)
         current_input = prompt("Type more words: ")
-        if current_input[0].lower() in ["quit", "exit"]:
+        if len(current_input) > 0 and current_input[0].lower() in ["quit", "exit"]:
             break
         else:
             session_words += current_input
