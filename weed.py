@@ -1,25 +1,29 @@
+import datetime
 
 DAILY_TARGET_WORD_COUNT = 10
+
+start = datetime.datetime.now()
+print(start)
 
 def main():
     target_wc = DAILY_TARGET_WORD_COUNT
     session_words = []
+    elapsed_seconds = 0
+    time_started = datetime.datetime.now()
     while len(session_words) < target_wc:
-        current_wc = len(session_words)
-        words_remaining = target_wc - current_wc
+        #current_wc = len(session_words)
         print(" ".join(session_words))
-        print(f"Current word count: {current_wc}. {words_remaining} words remaining.")
+        report_session(len(session_words), target_wc, elapsed_seconds)
         current_input = prompt("Type more words: ")
         if current_input[0].lower() in ["quit", "exit"]:
             break
         else:
             session_words += current_input
-        #split_input = current_input.split()
-        #filtered_input = list(filter(not_empty_or_whitespace, split_input))
-        #for word in split_input:
-        #    if not_empty_or_whitespace(word):
-        #        session_words.append(word)
     print(" ".join(session_words))
+    time_finished = datetime.datetime.now()
+    session_timedelta = time_finished - time_started
+    elapsed_seconds += round(session_timedelta.total_seconds(), 0)
+    report_session(len(session_words), target_wc, elapsed_seconds)
     return len(session_words)
 
 def prompt(message) -> list:
@@ -27,6 +31,15 @@ def prompt(message) -> list:
     splitted = raw_input.split()
     filtered = list(filter(no_whitespace, splitted))
     return filtered
+
+def report_session(wc: int, target_wc: int, elapsed_seconds: int) -> None:
+    words_remaining = target_wc - wc if wc < target_wc else 0
+    result = f"Current word count: {wc}. "
+    if words_remaining > 0:
+        result += f"{words_remaining} words remaining. "
+    if elapsed_seconds > 0:
+        result += f"Duration: {round(elapsed_seconds / 60, 1)} minutes."
+    print(result)
 
 def no_whitespace(text) -> bool:
     if text not in [" ", "\t", "\n", "\r", "\f", "\v", ""]:
