@@ -23,6 +23,7 @@ def main():
     report_session(len(session_words), target_wc, time_started)
     return len(session_words)
 
+# Main app functions.
 def prompt(message) -> list:
     """ Use input() to take in some text, and return a list of strings filtered for empty strings and whitespace. """
     raw_input = input(message)
@@ -39,10 +40,6 @@ def duration(start_time) -> float:
     elapsed_seconds += round(session_timedelta.total_seconds(), 0)
     return elapsed_seconds
 
-def minutes_from_seconds(seconds: int) -> float:
-    """ Takes an integer of seconds and returns a representation in minutes. """
-    return round(seconds / 60, 1)
-
 def report_session(wc: int, target_wc: int, start_time) -> None:
     words_remaining = target_wc - wc if wc < target_wc else 0
     result = f"Current word count: {wc}. "
@@ -51,6 +48,11 @@ def report_session(wc: int, target_wc: int, start_time) -> None:
     #if elapsed_seconds > 0:
     result += f"Duration: {minutes_from_seconds(duration(start_time))} minutes."
     print(result)
+
+# Helper and processing functions.
+def minutes_from_seconds(seconds: int) -> float:
+    """ Takes an integer of seconds and returns a representation in minutes. """
+    return round(seconds / 60, 1)
 
 def no_whitespace(text) -> bool:
     if text not in [" ", "\t", "\n", "\r", "\f", "\v", ""]:
