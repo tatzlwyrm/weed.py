@@ -13,32 +13,43 @@ def main():
     while len(session_words) < target_wc:
         #current_wc = len(session_words)
         print(" ".join(session_words))
-        report_session(len(session_words), target_wc, elapsed_seconds)
+        report_session(len(session_words), target_wc, time_started)
         current_input = prompt("Type more words: ")
         if len(current_input) > 0 and current_input[0].lower() in ["quit", "exit"]:
             break
         else:
             session_words += current_input
     print(" ".join(session_words))
-    time_finished = datetime.datetime.now()
-    session_timedelta = time_finished - time_started
-    elapsed_seconds += round(session_timedelta.total_seconds(), 0)
-    report_session(len(session_words), target_wc, elapsed_seconds)
+    report_session(len(session_words), target_wc, time_started)
     return len(session_words)
 
 def prompt(message) -> list:
+    """ Use input() to take in some text, and return a list of strings filtered for empty strings and whitespace. """
     raw_input = input(message)
     splitted = raw_input.split()
     filtered = list(filter(no_whitespace, splitted))
     return filtered
 
-def report_session(wc: int, target_wc: int, elapsed_seconds: int) -> None:
+def duration(start_time) -> float:
+    """ Takes a datetime object and returns a float representing seconds of elapsed time. """
+    assert type(start_time) == type(datetime.datetime.now())
+    elapsed_seconds = 0
+    stop_time = datetime.datetime.now()
+    session_timedelta = stop_time - start_time
+    elapsed_seconds += round(session_timedelta.total_seconds(), 0)
+    return elapsed_seconds
+
+def minutes_from_seconds(seconds: int) -> float:
+    """ Takes an integer of seconds and returns a representation in minutes. """
+    return round(seconds / 60, 1)
+
+def report_session(wc: int, target_wc: int, start_time) -> None:
     words_remaining = target_wc - wc if wc < target_wc else 0
     result = f"Current word count: {wc}. "
     if words_remaining > 0:
         result += f"{words_remaining} words remaining. "
-    if elapsed_seconds > 0:
-        result += f"Duration: {round(elapsed_seconds / 60, 1)} minutes."
+    #if elapsed_seconds > 0:
+    result += f"Duration: {minutes_from_seconds(duration(start_time))} minutes."
     print(result)
 
 def no_whitespace(text) -> bool:
